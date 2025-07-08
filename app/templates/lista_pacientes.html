@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Pacientes Registrados</h2>
+    <form method="get" class="mb-3 d-flex gap-2">
+        <input type="text" name="buscar" placeholder="Buscar por nombre" value="{{ request.args.buscar or '' }}"
+            class="form-control" />
+
+        <select name="sexo" class="form-select">
+            <option value="">Todos</option>
+            <option value="M" {% if request.args.sexo=='M' %}selected{% endif %}>Masculino</option>
+            <option value="F" {% if request.args.sexo=='F' %}selected{% endif %}>Femenino</option>
+        </select>
+
+
+
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>RUT</th>
+                <th>Fecha Nacimiento</th>
+                <th>Sexo</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Dirección</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in pacientes %}
+            <tr>
+                <td>{{ p.id }}</td>
+                <td>{{ p.nombre }}</td>
+                <td>{{ p.rut }}</td>
+                <td>{{ p.fecha_nacimiento }}</td>
+                <td>{{ p.sexo }}</td>
+                <td>{{ p.telefono }}</td>
+                <td>{{ p.email }}</td>
+                <td>{{ p.direccion }}</td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <a href="{{ url_for('paciente.editar_paciente', id=p.id) }}"
+                            class="btn btn-sm btn-warning">Editar</a>
+
+                        <form method="POST" action="{{ url_for('paciente.eliminar_paciente', id=p.id) }}"
+                            onsubmit="return confirm('¿Estás seguro de que deseas eliminar este paciente?');">
+                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Editar Examen</h2>
+    <form method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre del Examen</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" value="{{ examen.nombre }}" required>
+        </div>
+
+        {% if current_user.role == 'admin' %}
+        <div class="mb-3">
+            <label for="archivo" class="form-label">Archivo Nuevo (opcional)</label>
+            <input type="file" class="form-control" id="archivo" name="archivo">
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <a href="{{ url_for('examen.lista_examenes') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

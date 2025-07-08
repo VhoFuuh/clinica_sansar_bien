@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Usuarios Registrados</h2>
+
+  <!-- Filtros -->
+  <form method="get" class="mb-3 d-flex gap-2">
+    <input type="text" name="buscar" placeholder="Buscar por nombre" value="{{ request.args.buscar or '' }}"
+      class="form-control" />
+    <select name="rol" class="form-select" onchange="this.form.submit()">
+      <option value="">Todos los roles</option>
+      {% for r in ['admin', 'medico', 'kinesiologo', 'nutricionista', 'psicologo', 'enfermero', 'tecnologo_medico',
+      'fonoaudiologo', 'terapeuta_ocupacional', 'matrona', 'odontologo', 'quimico_farmaceutico'] %}
+      <option value="{{ r }}" {% if request.args.rol==r %}selected{% endif %}>{{ r.capitalize().replace('_', ' ') }}
+      </option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary">Buscar</button>
+  </form>
+
+  <!-- Tabla de usuarios -->
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre de Usuario</th>
+        <th>Rol</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in usuarios %}
+      <tr>
+        <td>{{ u.id }}</td>
+        <td>{{ u.username }}</td>
+        <td>{{ u.role }}</td>
+        <td>
+          <a href="{{ url_for('user.editar_usuario', usuario_id=u.id) }}" class="btn btn-sm btn-warning">Editar</a>
+
+          <form action="{{ url_for('user.eliminar_usuario', usuario_id=u.id) }}" method="post" style="display:inline;"
+            onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
+            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+          </form>
+        </td>
+
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="mt-4">
+  <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">⬅ Volver al Dashboard</a>
+</div>
+
+{% endblock %}

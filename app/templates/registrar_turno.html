@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Registrar Turno{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Agendar nuevo turno</h2>
+
+<form method="POST" action="{{ url_for('turno.registrar_turno') }}">
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+        {{ form.paciente_id.label(class="form-label") }}
+        {{ form.paciente_id(class="form-select") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.fecha.label(class="form-label") }}
+        {{ form.fecha(class="form-control") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.hora.label(class="form-label") }}
+        {{ form.hora(class="form-control") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.motivo.label(class="form-label") }}
+        {{ form.motivo(class="form-control") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.tipo.label(class="form-label") }}
+        {{ form.tipo(class="form-select") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.submit(class="btn btn-primary") }}
+    </div>
+</form>
+{% endblock %}

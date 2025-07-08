@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Editar Paciente' if editar else 'Registrar Paciente' }}{% endblock %}
+
+{% block content %}
+<h2>{{ 'Editar Paciente' if editar else 'Registrar Paciente' }}</h2>
+
+
+<form method="POST" action="{{ url_for('paciente.registrar_paciente') }}">
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+        {{ form.nombre.label(class="form-label") }}
+        {{ form.nombre(class="form-control") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.rut.label(class="form-label") }}
+        {{ form.rut(class="form-control") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.fecha_nacimiento.label(class="form-label") }}
+        {{ form.fecha_nacimiento(class="form-control") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.sexo.label(class="form-label") }}
+        {{ form.sexo(class="form-select") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.telefono.label(class="form-label") }}
+        {{ form.telefono(class="form-control") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.email.label(class="form-label") }}
+        {{ form.email(class="form-control") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.direccion.label(class="form-label") }}
+        {{ form.direccion(class="form-control") }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        {{ 'Actualizar' if editar else 'Registrar' }}
+    </button>
+
+    </div>
+</form>
+{% endblock %}

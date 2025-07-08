@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Bienvenido {{ current_user.username }} 👋</h2>
+<p>Tu rol es: <strong>{{ current_user.role }}</strong></p>
+
+<hr>
+
+<div class="row">
+  <div class="col-md-4">
+    <a href="{{ url_for('paciente.registrar_paciente') }}" class="btn btn-outline-primary w-100 mb-3">
+      Registrar Paciente
+    </a>
+  </div>
+  <div class="col-md-4">
+    <a href="{{ url_for('main.registrar_turno') }}" class="btn btn-outline-primary w-100 mb-3">
+      Agendar Turno
+    </a>
+  </div>
+
+  <div class="col-md-4">
+    <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger w-100 mb-3">
+      Cerrar sesión
+    </a>
+  </div>
+  <div class="container mt-4">
+    <h2>Panel Principal</h2>
+
+    <a href="{{ url_for('main.lista_turnos') }}" class="btn btn-secondary mt-3">Ver Turnos</a>
+    </a>
+  </div>
+
+  {% if current_user.is_authenticated and current_user.role == 'admin' %}
+  <div class="container mt-4">
+    <h4>Gestión de Usuarios</h4>
+    <div class="d-grid gap-2 d-md-block">
+      <a href="{{ url_for('user.lista_usuarios') }}" class="btn btn-outline-primary mb-2">👥 Ver Usuarios</a>
+      <a href="{{ url_for('user.crear_usuario') }}" class="btn btn-outline-success mb-2">➕ Registrar Usuario</a>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+<div class="col-md-4">
+  <a href="{{ url_for('examen.lista_examenes') }}" class="btn btn-info">Ver Exámenes</a>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Exámenes Subidos</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Archivo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for examen in examenes %}
+            <tr>
+                <td>{{ examen.id }}</td>
+                <td>{{ examen.nombre }}</td>
+                <td>{{ examen.archivo }}</td>
+                <td>
+                    <a href="{{ url_for('static', filename='archivos_examenes/' ~ examen.archivo) }}"
+                        class="btn btn-primary btn-sm" target="_blank">Ver</a>
+                    <a href="{{ url_for('static', filename='archivos_examenes/' ~ examen.archivo) }}" download
+                        class="btn btn-success btn-sm">Descargar</a>
+                    <a href="{{ url_for('examen.editar_examen', id=examen.id) }}"
+                        class="btn btn-warning btn-sm">Editar</a>
+                    <form action="{{ url_for('examen.eliminar_examen', id=examen.id) }}" method="post"
+                        style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm"
+                            onclick="return confirm('¿Estás seguro de que quieres eliminar este examen?');">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Editar Turno</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.paciente_id.label(class="form-label") }}
+            {{ form.paciente_id(class="form-select") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.fecha.label(class="form-label") }}
+            {{ form.fecha(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.hora.label(class="form-label") }}
+            {{ form.hora(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.motivo.label(class="form-label") }}
+            {{ form.motivo(class="form-select") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.tipo.label(class="form-label") }}
+            {{ form.tipo(class="form-select") }}
+        </div>
+
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
+</div>
+{% endblock %}
