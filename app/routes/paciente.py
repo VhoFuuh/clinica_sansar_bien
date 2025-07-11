@@ -4,6 +4,7 @@ from app import db
 from app.models.paciente import Paciente
 from flask_login import login_required
 from flask import render_template  
+from app.models.examen import Examen
 
 def limpiar_rut(rut):
     return rut.replace(".", "").replace("-", "").strip()
@@ -108,7 +109,13 @@ def editar_paciente(id):
         flash('Paciente actualizado correctamente.', 'success')
         return redirect(url_for('paciente.lista_pacientes'))
 
-    return render_template('registrar_paciente.html', form=form, editar=True)
+    return render_template(
+        'registrar_paciente.html',
+        form=form,
+        editar=True,
+        paciente=paciente       
+    )
+
 
 
 @paciente_bp.route('/pacientes/eliminar/<int:id>', methods=['POST'])
@@ -121,5 +128,19 @@ def eliminar_paciente(id):
     return redirect(url_for('paciente.lista_pacientes'))
 
 
-
+@paciente_bp.route('/pacientes/<int:id>')
+@login_required
+def detalle_paciente(id):
+    paciente = Paciente.query.get_or_404(id)
+    # Exámenes ordenados de más reciente a más antiguo
+    examenes = (
+        paciente.examenes
+                .order_by(Examen.fecha_subida.desc())
+                .all()
+    )
+    return render_template(
+        'detalle_paciente.html',
+        paciente=paciente,
+        examenes=examenes
+    )
 

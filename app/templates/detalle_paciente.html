@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Ficha de {{ paciente.nombre }}</h2>
+  <p><strong>RUT:</strong> {{ paciente.rut }}</p>
+  <p><strong>Correo:</strong> {{ paciente.email }}</p>
+  <!-- Otros datos si los tienes -->
+
+  <h3 class="mt-4">Historial de Exámenes</h3>
+  {% if examenes %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Nombre</th>
+        <th>Fecha de Subida</th>
+        <th>Archivo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ex in examenes %}
+      <tr>
+        <td>{{ ex.id }}</td>
+        <td>{{ ex.nombre }}</td>
+        <td>{{ ex.fecha_subida.strftime('%d-%m-%Y %H:%M') }}</td>
+        <td>
+          <a href="{{ url_for('static', filename='archivos_examenes/' ~ ex.archivo) }}" class="btn btn-sm btn-primary" target="_blank">Ver</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p>No hay exámenes registrados para este paciente.</p>
+  {% endif %}
+
+  <a href="{{ url_for('examen.subir_examen') }}?paciente_id={{ paciente.id }}" class="btn btn-success">Añadir Examen</a>
+  <a href="{{ url_for('paciente.lista_pacientes') }}" class="btn btn-secondary">Volver a Pacientes</a>
+</div>
+{% endblock %}

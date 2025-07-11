@@ -1,53 +1,35 @@
-{% extends "base.html" %}
-
+{% extends 'base.html' %}
 {% block content %}
-<h2>Filtrar Turnos</h2>
-
-<form method="POST" class="mb-4">
-    <!--{{ form.hidden_tag() }}-->
-    <div class="row g-3">
-        <div class="col-md-4">
-            {{ form.fecha.label }} {{ form.fecha(class="form-control") }}
-        </div>
-        <div class="col-md-4" >
-            {{ form.tipo.label }} {{ form.tipo(class="form-select") }}
-        </div>
-        <div class="col-md-4">
-            {{ form.submit(class="btn btn-primary mt-4") }}
-        </div>
-    </div>
-</form>
-
-<div class="container mt-5">
-    <h2 class="mb-4">Lista de Turnos</h2>
-
-    <table class="table table-bordered table-hover table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>Paciente</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Motivo</th>
-                <th>Tipo</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for turno in turnos %}
-            <tr>
-                <td>{{ turno.paciente.nombre }}</td>
-                <td>{{ turno.fecha.strftime('%Y-%m-%d') }}</td>
-                <td>{{ turno.hora.strftime('%H:%M') }}</td>
-                <td>{{ turno.motivo.capitalize() }}</td>
-                <td>{{ turno.tipo.capitalize() }}</td>
-                <td>
-                    <a href="{{ url_for('main.editar_turno', turno_id=turno.id) }}" class="btn btn-sm btn-warning">Editar</a>
-                    <a href="{{ url_for('main.eliminar_turno', turno_id=turno.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este turno?');">Eliminar</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="container mt-4">
+  <h2>Todos los Turnos</h2>
+  {% if turnos %}
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>#</th><th>Fecha</th><th>Hora</th><th>Paciente</th><th>Motivo</th><th>Profesional</th><th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for turno in turnos %}
+      <tr>
+        <td>{{ turno.id }}</td>
+        <td>{{ turno.fecha.strftime('%d-%m-%Y') }}</td>
+        <td>{{ turno.hora.strftime('%H:%M') }}</td>
+        <td>{{ turno.paciente.nombre }}</td>
+        <td>{{ turno.motivo or '-' }}</td>
+        <td>{{ turno.profesional.username }}</td>
+        <td>
+          <a href="{{ url_for('turno.editar_turno', id=turno.id) }}" class="btn btn-sm btn-warning">Editar</a>
+          <form action="{{ url_for('turno.eliminar_turno', id=turno.id) }}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar turno?');">Eliminar</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p>No hay turnos registrados.</p>
+  {% endif %}
 </div>
-
 {% endblock %}

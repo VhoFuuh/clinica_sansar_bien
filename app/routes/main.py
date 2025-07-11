@@ -118,18 +118,3 @@ def registrar_usuario():
 def lista_usuarios():
     usuarios = User.query.all()
     return render_template('lista_usuarios.html', usuarios=usuarios)
-
-@main_bp.route('/enviar_correo_prueba')
-def enviar_correo_prueba():
-    try:
-        msg = Message(
-            subject="Correo de prueba",
-            recipients=["alvarosebcis@gmail.com"],  # reemplaza por tu correo real
-            body="Este es un correo de prueba enviado desde Flask."
-        )
-        mail.send(msg)
-        flash('Correo de prueba enviado correctamente.', 'success')
-    except Exception as e:
-        flash(f'Error al enviar correo: {str(e)}', 'danger')
-    
-    return redirect(url_for('main.dashboard'))

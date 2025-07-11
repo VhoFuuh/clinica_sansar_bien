@@ -1,36 +1,39 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
 <div class="container mt-4">
-    <h2>Editar Turno</h2>
-    <form method="POST">
-        {{ form.hidden_tag() }}
+  <h2>Editar Turno #{{ turno.id }}</h2>
+  <form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
 
-        <div class="mb-3">
-            {{ form.paciente_id.label(class="form-label") }}
-            {{ form.paciente_id(class="form-select") }}
-        </div>
+    <div class="mb-3">
+      {{ form.paciente_id.label(class="form-label") }}
+      {{ form.paciente_id(class="form-select") }}
+    </div>
 
-        <div class="mb-3">
-            {{ form.fecha.label(class="form-label") }}
-            {{ form.fecha(class="form-control") }}
-        </div>
+    <div class="mb-3">
+      {{ form.fecha.label(class="form-label") }}
+      {{ form.fecha(class="form-control") }}
+    </div>
 
-        <div class="mb-3">
-            {{ form.hora.label(class="form-label") }}
-            {{ form.hora(class="form-control") }}
-        </div>
+    <div class="mb-3">
+      {{ form.hora.label(class="form-label") }}
+      {{ form.hora(class="form-control") }}
+    </div>
 
-        <div class="mb-3">
-            {{ form.motivo.label(class="form-label") }}
-            {{ form.motivo(class="form-select") }}
-        </div>
+    <div class="mb-3">
+      {{ form.motivo.label(class="form-label") }}
+      {{ form.motivo(class="form-control") }}
+    </div>
 
-        <div class="mb-3">
-            {{ form.tipo.label(class="form-label") }}
-            {{ form.tipo(class="form-select") }}
-        </div>
+    {% if form.professional_id %}
+    <div class="mb-3">
+      {{ form.profesional_id.label(class="form-label") }}
+      {{ form.profesional_id(class="form-select") }}
+    </div>
+    {% endif %}
 
-        {{ form.submit(class="btn btn-primary") }}
-    </form>
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    <a href="{{ url_for('turno.lista_turnos') }}" class="btn btn-secondary">Cancelar</a>
+  </form>
 </div>
 {% endblock %}

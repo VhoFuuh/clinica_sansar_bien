@@ -12,3 +12,10 @@ class Paciente(db.Model):
 
     def __repr__(self):
         return f'<Paciente {self.nombre}>'
+    
+    examenes = db.relationship(
+        'Examen',           
+        backref='paciente', 
+        lazy='dynamic',     
+        cascade='all, delete-orphan'
+    )

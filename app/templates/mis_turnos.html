@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Mis Turnos</h2>
+  {% if turnos %}
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Paciente</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for turno in turnos %}
+      <tr>
+        <td>{{ turno.id }}</td>
+        <td>{{ turno.fecha.strftime('%d-%m-%Y') }}</td>
+        <td>{{ turno.hora.strftime('%H:%M') }}</td>
+        <td>{{ turno.paciente.nombre }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p>No tienes turnos asignados.</p>
+  {% endif %}
+</div>
+{% endblock %}

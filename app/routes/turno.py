@@ -8,6 +8,7 @@ from flask import render_template
 from app import mail
 from app.utils.email_utils import enviar_correo
 from app.models.paciente import Paciente 
+from app.utils.auth import admin_required
 
 turno_bp = Blueprint('turno', __name__)  
 
@@ -34,12 +35,14 @@ def asignar_turno():
 
 from app.forms.turno_form import TurnoForm  # Asegúrate de tener este import
 
+
 @turno_bp.route('/turnos')
 @login_required
+@admin_required
 def lista_turnos():
+    # Sólo administradores llegan aquí
     turnos = Turno.query.all()
-    form = TurnoForm()
-    return render_template('lista_turnos.html', turnos=turnos, form=form)
+    return render_template('lista_turnos.html', turnos=turnos)
 
 from app.utils.email_utils import enviar_correo
 from app.models.paciente import Paciente  # si no lo tienes ya importado
@@ -81,3 +84,45 @@ def registrar_turno():
 
     return render_template('registrar_turno.html', form=form)
 
+@turno_bp.route('/mis_turnos')
+@login_required
+def mis_turnos():
+    # Solo los turnos del usuario/profesional conectado
+    turnos = (
+        Turno.query
+            .filter_by(profesional_id=current_user.id)
+            .order_by(Turno.fecha.desc(), Turno.hora.desc())
+            .all()
+    )
+    return render_template('mis_turnos.html', turnos=turnos)
+
+@turno_bp.route('/turnos/editar/<int:id>', methods=['GET', 'POST'])
+@login_required
+def editar_turno(id):
+    turno = Turno.query.get_or_404(id)
+    form = TurnoForm(obj=turno)
+    form.paciente_id.choices = [(p.id, p.nombre) for p in Paciente.query.all()]
+
+    if form.validate_on_submit():
+        turno.paciente_id    = form.paciente_id.data
+        turno.fecha          = form.fecha.data
+        turno.hora           = form.hora.data
+        turno.motivo         = getattr(form, 'motivo', type('m', (), {'data':turno.motivo})) .data
+        # si en tu TurnoForm tienes campo profesional_id:
+        if hasattr(form, 'profesional_id'):
+            turno.profesional_id = form.profesional_id.data
+        db.session.commit()
+        flash('Turno actualizado correctamente.', 'success')
+        return redirect(url_for('turno.lista_turnos'))
+
+    return render_template('editar_turno.html', form=form, turno=turno)
+
+
+@turno_bp.route('/turnos/eliminar/<int:id>', methods=['POST'])
+@login_required
+def eliminar_turno(id):
+    turno = Turno.query.get_or_404(id)
+    db.session.delete(turno)
+    db.session.commit()
+    flash('Turno eliminado correctamente.', 'success')
+    return redirect(url_for('turno.lista_turnos'))

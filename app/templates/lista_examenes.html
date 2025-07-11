@@ -16,7 +16,7 @@
             {% for examen in examenes %}
             <tr>
                 <td>{{ examen.id }}</td>
-                <td>{{ examen.nombre }}</td>
+                <td>{{ examen.nombre_examen }}</td>
                 <td>{{ examen.archivo }}</td>
                 <td>
                     <a href="{{ url_for('static', filename='archivos_examenes/' ~ examen.archivo) }}"

@@ -3,11 +3,15 @@
 {% block title %}{{ 'Editar Paciente' if editar else 'Registrar Paciente' }}{% endblock %}
 
 {% block content %}
-<h2>{{ 'Editar Paciente' if editar else 'Registrar Paciente' }}</h2>
-
-
-<form method="POST" action="{{ url_for('paciente.registrar_paciente') }}">
-    {{ form.hidden_tag() }}
+  <div class="container mt-4">
+    <h2>{{ 'Editar Paciente' if editar else 'Registrar Paciente' }}</h2>
+    <form method="POST"
+          action="{% if editar %}
+                     {{ url_for('paciente.editar_paciente', id=paciente.id) }}
+                  {% else %}
+                     {{ url_for('paciente.registrar_paciente') }}
+                  {% endif %}">
+      {{ form.hidden_tag() }}
 
     <div class="mb-3">
         {{ form.nombre.label(class="form-label") }}
@@ -44,10 +48,14 @@
         {{ form.direccion(class="form-control") }}
     </div>
 
-    <button type="submit" class="btn btn-primary">
-        {{ 'Actualizar' if editar else 'Registrar' }}
-    </button>
-
-    </div>
-</form>
+      <button type="submit"
+              class="btn {{ 'btn-primary' if editar else 'btn-success' }}">
+        {{ 'Guardar Cambios' if editar else 'Registrar Paciente' }}
+      </button>
+      {% if editar %}
+      <a href="{{ url_for('paciente.lista_pacientes') }}"
+         class="btn btn-secondary">Cancelar</a>
+      {% endif %}
+    </form>
+  </div>
 {% endblock %}

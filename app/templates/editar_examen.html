@@ -5,8 +5,8 @@
     <h2>Editar Examen</h2>
     <form method="post" enctype="multipart/form-data">
         <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre del Examen</label>
-            <input type="text" class="form-control" id="nombre" name="nombre" value="{{ examen.nombre }}" required>
+            <label for="nombre_examen" class="form-label">Nombre del Examen</label>
+            <input type="text" class="form-control" id="nombre_examen" name="nombre_examen" value="{{ examen.nombre_examen }}" required>
         </div>
 
         {% if current_user.role == 'admin' %}
